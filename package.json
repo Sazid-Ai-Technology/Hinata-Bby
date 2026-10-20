@@ -67,13 +67,13 @@
         "license": "MIT",
         "repository": {
                 "type": "git",
-                "url": "git+https://github.com/aura-mahmud/Hinata-Bot-V3.git"
+                "url": "git+https://github.com/mahmudx7/Hinata-Bot-V3.git"
         },
         "keywords": [],
         "bugs": {
-                "url": "https://github.com/aura-mahmud/Hinata-Bot-V3/issues"
+                "url": "https://github.com/mahmudx7/Hinata-Bot-V3/issues"
         },
-        "homepage": "https://github.com/aura-mahmud/Hinata-Bot-V3#readme",
+        "homepage": "https://github.com/mahmudx7/Hinata-Bot-V3#readme",
         "devDependencies": {
                 "eslint": "^8.2.0",
                 "eslint-config-airbnb": "^19.0.4",
