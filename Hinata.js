@@ -5,7 +5,7 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const google = require("googleapis").google;
 const nodemailer = require("nodemailer");
-const { HINATAcSync } = require('child_process');
+const { execSync } = require('child_process');
 const log = require('./logger/log.js');
 const path = require("path");
 
@@ -15,19 +15,17 @@ function validJSON(pathDir) {
 	try {
 		if (!fs.existsSync(pathDir))
 			throw new Error(`File "${pathDir}" not found`);
-		HINATAcSync(`npx jsonlint "${pathDir}"`, { stdio: 'pipe' });
+		
+		const fileContent = fs.readFileSync(pathDir, 'utf-8');
+		JSON.parse(fileContent);
 		return true;
 	}
 	catch (err) {
-		let msgError = err.message;
-		msgError = msgError.split("\n").slice(1).join("\n");
-		const indexPos = msgError.indexOf("    at");
-		msgError = msgError.slice(0, indexPos != -1 ? indexPos - 1 : msgError.length);
-		throw new Error(msgError);
+		throw new Error(err.message);
 	}
 }
 
-// ———————————————— FIXED PATHS (NO MORE .DEV) ———————————————— //
+// ———————————————— FIXED PATHS ———————————————— //
 const dirConfig = path.normalize(`${__dirname}/config.json`);
 const dirConfigCommands = path.normalize(`${__dirname}/configCommands.json`);
 const dirAccount = path.normalize(`${__dirname}/account.txt`);
@@ -37,10 +35,11 @@ for (const pathDir of [dirConfig, dirConfigCommands]) {
 		validJSON(pathDir);
 	}
 	catch (err) {
-		log.error("CONFIG", `Invalid JSON file "${pathDir.replace(__dirname, "")}":\n${err.message.split("\n").map(line => `  ${line}`).join("\n")}\nPlease fix it and restart bot`);
+		log.error("CONFIG", `Invalid JSON file "${pathDir.replace(__dirname, "")}":\n  ${err.message}\nPlease fix it and restart bot`);
 		process.exit(0);
 	}
 }
+
 const config = require(dirConfig);
 if (config.whiteListMode?.whiteListIds && Array.isArray(config.whiteListMode.whiteListIds))
 	config.whiteListMode.whiteListIds = config.whiteListMode.whiteListIds.map(id => id.toString());
@@ -241,21 +240,28 @@ if (config.autoRestart) {
 	global.utils.transporter = transporter;
 
 	// ———————————————— CHECK VERSION ———————————————— //
-	const { data: { version } } = await axios.get("https://raw.githubusercontent.com/aura-mahmud/Hinata-Bot-V3/main/package.json");
-	const currentVersion = require("./package.json").version;
-	if (compareVersion(version, currentVersion) === 1)
-		utils.log.master("NEW VERSION", getText(
-			"Goat",
-			"newVersionDetected",
-			colors.gray(currentVersion),
-			colors.hex("#eb6a07", version),
-			colors.hex("#eb6a07", "node update")
-		));
+	try {
+		const { data: { version } } = await axios.get("https://raw.githubusercontent.com/aura-mahmud/Hinata-Bot-V3/main/package.json");
+		const currentVersion = require("./package.json").version;
+		if (compareVersion(version, currentVersion) === 1)
+			utils.log.master("NEW VERSION", getText(
+				"Goat",
+				"newVersionDetected",
+				colors.gray(currentVersion),
+				colors.hex("#eb6a07", version),
+				colors.hex("#eb6a07", "node update")
+			));
+	} catch (e) {
+		// Version check bypass on network fail
+	}
+
 	// —————————— CHECK FOLDER GOOGLE DRIVE —————————— //
-	const parentIdGoogleDrive = await utils.drive.checkAndCreateParentFolder("GoatBot");
-	utils.drive.parentID = parentIdGoogleDrive;
+	try {
+		const parentIdGoogleDrive = await utils.drive.checkAndCreateParentFolder("GoatBot");
+		utils.drive.parentID = parentIdGoogleDrive;
+	} catch (e) {}
 	
-	// ———————————————————— LOGIN (ALWAYS READ login.js) ———————————————————— //
+	// ———————————————————— LOGIN ———————————————————— //
 	require(`./bot/login/login.js`);
 })();
 
