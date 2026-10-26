@@ -20,7 +20,7 @@
   <img alt="Version" src="https://img.shields.io/badge/dynamic/json?color=brightgreen&label=Version&prefix=v&query=%24.version&url=https://github.com/aura-mahmud/Hinata-Bot-V3/raw/main/package.json&style=flat-square">
   <img alt="Visitors" src="https://visitor-badge.laobi.icu/badge?style=flat-square&page_id=aura-mahmud/Hinata-Bot-V3">
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green?style=flat-square&color=brightgreen">
-  <a href="https://aura-mahmud.is-a.dev">
+  <a href="https://mahmud-aura.is-a.dev">
     <img src="https://img.shields.io/badge/Portfolio-mahmud--aura.is--a.dev-blue?style=flat-square&logo=googlechrome&logoColor=white" alt="Portfolio">
   </a>
 </p>
@@ -75,7 +75,7 @@ Switch the bot's response language anytime in `config.json`.
 Hinata Bot V3 ships with a huge collection of free commands — and the list keeps growing. New commands are added and existing ones get updated day by day.
 
 <p align="center">
-  <a href="https://aura-mahmud.is-a.dev/cmds" target="_blank">
+  <a href="https://mahmud-aura.is-a.dev/cmds" target="_blank">
     <img src="https://img.shields.io/badge/Browse%20Free%20Commands-25D366?style=for-the-badge&logo=googlechat&logoColor=white" alt="Free Commands">
   </a>
 </p>
