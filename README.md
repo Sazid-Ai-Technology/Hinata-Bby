@@ -166,7 +166,7 @@ Found a bug? Need a custom feature or a private Messenger bot built for you? Rea
   <img src="https://i.imgur.com/UM3ekFf.jpeg" width="150px" style="border-radius: 50%;"/>
   <br>
   <b>MahMUD</b><br>
-  <a href="https://aura-mahmud.is-a.dev">aura-mahmud.is-a.dev</a>
+  <a href="https://mahmud-aura.is-a.dev">aura-mahmud.is-a.dev</a>
 </p>
 
 ---
