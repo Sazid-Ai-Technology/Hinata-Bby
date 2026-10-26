@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const mahmud = async () => {
+const baseApiUrl = async () => {
         const base = await axios.get("https://raw.githubusercontent.com/aura-mahmud/HINATA/main/baseApiUrl.json");
         return base.data.mahmud;
 };
@@ -8,41 +8,34 @@ const mahmud = async () => {
 module.exports = {
         config: {
                 name: "remini",
-                version: "1.7",
+                aliases: [],
+                version: "3.7",
                 author: "MahMUD",
                 countDown: 10,
                 role: 0,
                 description: {
-                        bn: "Remini AI এর মাধ্যমে ছবির কোয়ালিটি উন্নত করুন",
                         en: "Enhance or restore image quality using Remini AI",
                         vi: "Nâng cao chất lượng hình ảnh bằng Remini AI"
                 },
                 category: "tools",
                 guide: {
-                        bn: '   {pn} [url]: ছবির লিংকের মাধ্যমে Enhance করুন\n   অথবা ছবির রিপ্লাইয়ে {pn} লিখুন',
-                        en: '   {pn} [url]: Enhance image via URL\n   Or reply to an image with {pn}',
-                        vi: '   {pn} [url]: Nâng cấp ảnh qua URL\n   Hoặc phản hồi ảnh bằng {pn}'
+                        en: '   {pn} [url]: Remini image via URL' +
+                                '\n   {pn} [reply]: Reply to an image to remini',
+                        vi: '   {pn} [url]: Nâng cấp ảnh qua URL' +
+                                '\n   {pn} [reply]: Phản hồi ảnh để nâng cấp'
                 }
         },
 
         langs: {
-                bn: {
-                        noImage: "• বেবি, একটি ছবিতে রিপ্লাই দাও অথবা ছবির লিংক দাও! 😘",
-                        wait: "𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞𝐬 𝐥𝐨𝐚𝐝𝐢𝐧𝐠...𝐰𝐚𝐢𝐭 𝐛𝐚𝐛𝐲 😘",
-                        success: "✅ | 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞 𝐛𝐚𝐛𝐲",
-                        error: "× সমস্যা হয়েছে: %1। প্রয়োজনে Contact MahMUD।"
-                },
                 en: {
-                        noImage: "• Baby, please reply to an image or provide a link! 😘",
-                        wait: "𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞𝐬 𝐥𝐨𝐚𝐝𝐢𝐧𝐠...𝐰𝐚𝐢𝐭 𝐛𝐚𝐛𝐲 😘",
-                        success: "✅ | 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞 𝐛𝐚𝐛𝐲",
-                        error: "× API error: %1. Contact MahMUD for help."
+                        noImage: "• Baby, please reply to an image or provide a link.",
+                        success: "✅ | 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐫𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞 𝐛𝐚𝐛𝐲",
+                        error: "× API error: %1. Contact MahMUD for help.\n•WhatsApp: 01836298139"
                 },
                 vi: {
-                        noImage: "• Cưng ơi, hãy phản hồi một bức ảnh hoặc gửi link! 😘",
-                        wait: "𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞𝐬 𝐥𝐨𝐚𝐝𝐢𝐧𝐠...𝐰𝐚𝐢𝐭 𝐛𝐚𝐛𝐲 😘",
-                        success: "✅ | 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐑𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞 𝐛𝐚𝐛𝐲",
-                        error: "× Lỗi: %1. Liên hệ MahMUD để được hỗ trợ."
+                        noImage: "• Cưng ơi, hãy phản hồi một bức ảnh hoặc gửi link.",
+                        success: "✅ | 𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮'𝐫 𝐫𝐞𝐦𝐢𝐧𝐢 𝐢𝐦𝐚𝐠𝐞 𝐛𝐚𝐛𝐲",
+                        error: "× Lỗi: %1. Liên hệ MahMUD để được hỗ trợ.\n•WhatsApp: 01836298139"
                 }
         },
 
@@ -61,26 +54,24 @@ module.exports = {
 
                 if (!imgUrl) return api.sendMessage(getLang("noImage"), event.threadID, event.messageID);
 
-                const waitMsg = await api.sendMessage(getLang("wait"), event.threadID, event.messageID);
-                api.setMessageReaction("⏳", event.messageID, () => {}, true);
+                api.setMessageReaction("😘", event.messageID, () => {}, true);
 
                 try {
-                        const baseUrl = await mahmud();
-                        const apiUrl = `${baseUrl}/api/hd/mahmud?imgUrl=${encodeURIComponent(imgUrl)}`;
-                        
-                        const res = await axios.get(apiUrl, { responseType: "stream" });
+                        const response = await axios.get(`${await baseApiUrl()}/api/remini?imgUrl=${encodeURIComponent(imgUrl)}`, {
+                                method: "GET",
+                                responseType: "stream",
+                                headers: { 'User-Agent': 'Mozilla/5.0' }
+                        });
 
-                        if (waitMsg?.messageID) api.unsendMessage(waitMsg.messageID);
-                        api.setMessageReaction("✅", event.messageID, () => {}, true);
+                        api.setMessageReaction("🪽", event.messageID, () => {}, true);
 
                         return api.sendMessage({
                                 body: getLang("success"),
-                                attachment: res.data
+                                attachment: response.data
                         }, event.threadID, event.messageID);
 
                 } catch (err) {
-                        console.error("Error in remini command:", err);
-                        if (waitMsg?.messageID) api.unsendMessage(waitMsg.messageID);
+                        console.error("error", err);
                         api.setMessageReaction("❌", event.messageID, () => {}, true);
                         return api.sendMessage(getLang("error", err.message), event.threadID, event.messageID);
                 }
